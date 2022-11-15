@@ -33,19 +33,41 @@ char	*ft_strchr(const char *s, int c)
 	return ((char *)&s[i]);
 }
 
-char	*get_next_line(int fd)
+void	read_into_temp(int fd, char *temp, int read_ret)
 {
-	void		*buff;
-	static char	*temp;
-	char		*line;
+	char	*buff;
 
 	buff = malloc(BUFFER_SIZE + 1);
-	while (!ft_strchr(temp, '\n'))
+	if (!buff)
+		return (NULL);
+		read_ret = 1;
+	while (!ft_strchr(temp, '\n') && read_ret != 0)
 	{
-		read(fd, buff, BUFFER_SIZE);
+		read_ret = (int)read(fd, buff, BUFFER_SIZE);
+		if (read_ret == -1)
+		{
+			free (buff);
+			return ;
+		}
+		buff[BUFFER_SIZE + 1] = '\0';
 		temp = ft_strjoin(temp, buff);
 	}
-	line = ft_strdup(temp);
-	free(buff);
-	return (temp);
+}
+
+char	*get_next_line(int fd)
+{
+	char		*buff;
+	static char	*temp;
+	char		*line;
+	int			read_ret;
+
+	if (fd < 0 || BUFFER_SIZE < 1)
+		return (NULL);
+	read_ret = 1;
+	line = NULL;
+	read_into_temp(fd, &temp, &read_ret);
+	if (!temp) //se o ficheiro estiver vazio
+		return (NULL);
+	// line = ft_strdup(temp);
+	return (line);
 }
