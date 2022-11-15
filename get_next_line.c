@@ -30,23 +30,24 @@ char	*ft_strdup(const char *s)
 	return (g);
 }
 
-void	read_into_temp(int fd, char *temp, int read_ret)
+void	read_into_temp(int fd, char *temp)
 {
+	int		read_ret;
 	char	*buff;
 
+	read_ret = 1;
 	while (!ft_strchr(temp, '\n') && read_ret != 0)
 	{
 		buff = malloc(BUFFER_SIZE + 1); //dentro da loop para ir dando free
 		if (!buff)
 			return ;
-		read_ret = 1;
 		read_ret = (int)read(fd, buff, BUFFER_SIZE);
-		if (read_ret == -1)
+		if (read_ret == -1 || (!temp && read_ret == 0))
 		{
 			free (buff);
 			return ;
 		}
-		buff[BUFFER_SIZE + 1] = '\0';
+		buff[read_ret] = '\0';
 		temp = ft_strjoin(temp, buff);
 		free (buff);//pq vai ser overwritten pela função read
 	}
@@ -84,20 +85,20 @@ void	clear_temp(char *temp, int nl)
 	free (temp);
 	temp = ft_substr(tmp_tmp, nl, ft_strlen(tmp_tmp + nl));
 }
-
+///  ///////////////////////////////////////////
+///   main function
+///  ///////////////////////////////////////////
 char	*get_next_line(int fd)
 {
 	static char	*temp;
 	char		*line;
-	int			read_ret;
 	int			len;
 
-	if (fd < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, &line, 0) < 0)
 		return (NULL);
 	temp = NULL;
-	read_ret = 1;
 	line = NULL;
-	read_into_temp(fd, temp, read_ret);
+	read_into_temp(fd, temp);
 	if (!temp) //se o ficheiro estiver vazio
 		return (NULL);
 	len = cpy_line_only(temp);
