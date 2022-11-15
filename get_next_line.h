@@ -21,10 +21,17 @@
 # endif
 
 char	*get_next_line(int fd);
+void	read_into_temp(int fd, char *temp);
+int		cpy_line_only(char *temp);
+void	clear_temp(char *temp, int nl);
+
+
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr(const char *str, int c);
 size_t	ft_strlen(const char *str);
+char	*ft_strdup(const char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+void	*ft_memcpy(void *dest, const void *src, size_t n);
 char	*ft_strdup(const char *s);
 
 #endif
