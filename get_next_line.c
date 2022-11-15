@@ -37,12 +37,12 @@ void	read_into_temp(int fd, char *temp, int read_ret)
 {
 	char	*buff;
 
-	buff = malloc(BUFFER_SIZE + 1);
-	if (!buff)
-		return (NULL);
-		read_ret = 1;
 	while (!ft_strchr(temp, '\n') && read_ret != 0)
 	{
+		buff = malloc(BUFFER_SIZE + 1); //dentro da loop para ir dando free
+		if (!buff)
+			return (NULL);
+		read_ret = 1;
 		read_ret = (int)read(fd, buff, BUFFER_SIZE);
 		if (read_ret == -1)
 		{
@@ -53,6 +53,27 @@ void	read_into_temp(int fd, char *temp, int read_ret)
 		temp = ft_strjoin(temp, buff);
 		free (buff);//pq vai ser overwritten pela função read
 	}
+}
+
+void	cpy_line_only(char *temp, char *line)
+{
+	size_t	i;
+	size_t	len;
+
+	if (!temp)
+		return ;
+	len = 0;
+	while (temp[i])
+	{
+		if (temp[i] == '\n')
+		{
+			len ++;
+			break;
+		}
+		len++;
+		i++;
+	}
+	line = substr(temp, 0, len);
 }
 
 char	*get_next_line(int fd)
@@ -69,6 +90,6 @@ char	*get_next_line(int fd)
 	read_into_temp(fd, &temp, &read_ret);
 	if (!temp) //se o ficheiro estiver vazio
 		return (NULL);
-	// line = ft_strdup(temp);
+	cpy_line_only(temp, line);
 	return (line);
 }
