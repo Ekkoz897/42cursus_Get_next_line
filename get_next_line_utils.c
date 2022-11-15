@@ -22,15 +22,20 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *str, int c)
 {
 	int	i;
 
 	i = 0;
-	while (s[i] != (char)c)
-		if (!s[i++])
-			return (NULL);
-	return ((char *)&s[i]);
+	if ((char) c == '\0')
+		return ((char *)str + (int)ft_strlen(str));
+	while (str[i])
+	{
+		if (str[i] == (char) c)
+			return ((char *)str + i);
+		i++;
+	}
+	return (NULL);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
