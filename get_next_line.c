@@ -88,6 +88,7 @@ void	clear_temp(char *temp, int nl)
 ///  ///////////////////////////////////////////
 ///   main function
 ///  ///////////////////////////////////////////
+
 char	*get_next_line(int fd)
 {
 	static char	*temp;
