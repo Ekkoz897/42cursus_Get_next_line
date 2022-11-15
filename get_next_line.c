@@ -12,22 +12,31 @@
 
 #include "get_next_line.h"
 
-char	*ft_strdup(const char *s)
+char	*get_next_line(int fd)
 {
-	char	*g;
-	int		i;
+	static char	*temp;
+	char		*line;
+	int			len;
 
-	i = 0;
-	g = malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (!g)
+	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, &line, 0) < 0)
 		return (NULL);
-	while (s[i])
+	temp = NULL;
+	line = NULL;
+	read_into_temp(fd, temp);
+	if (!temp) //se o ficheiro estiver vazio
+		return (NULL);
+	len = cpy_line_only(temp);
+	line = ft_substr(temp, 0, len);
+	if (!line)
+		return (NULL); // para o caso do malloc da substr correr mal
+	clear_temp(temp, len);
+	if (line[0] == '\0')
 	{
-		g[i] = s[i];
-		i++;
+		free(temp);
+		free (line);
+		return (NULL);
 	}
-	g[i] = '\0';
-	return (g);
+	return (line);
 }
 
 void	read_into_temp(int fd, char *temp)
@@ -85,33 +94,21 @@ void	clear_temp(char *temp, int nl)
 	free (temp);
 	temp = ft_substr(tmp_tmp, nl, ft_strlen(tmp_tmp + nl));
 }
-///  ///////////////////////////////////////////
-///   main function
-///  ///////////////////////////////////////////
 
-char	*get_next_line(int fd)
+char	*ft_strdup(const char *s)
 {
-	static char	*temp;
-	char		*line;
-	int			len;
+	char	*g;
+	int		i;
 
-	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, &line, 0) < 0)
+	i = 0;
+	g = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (!g)
 		return (NULL);
-	temp = NULL;
-	line = NULL;
-	read_into_temp(fd, temp);
-	if (!temp) //se o ficheiro estiver vazio
-		return (NULL);
-	len = cpy_line_only(temp);
-	line = ft_substr(temp, 0, len);
-	if (!line)
-		return (NULL); // para o caso do malloc da substr correr mal
-	clear_temp(temp, len);
-	if (line[0] == '\0')
+	while (s[i])
 	{
-		free(temp);
-		free (line);
-		return (NULL);
+		g[i] = s[i];
+		i++;
 	}
-	return (line);
+	g[i] = '\0';
+	return (g);
 }
