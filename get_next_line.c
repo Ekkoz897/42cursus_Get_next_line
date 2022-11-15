@@ -51,6 +51,7 @@ void	read_into_temp(int fd, char *temp, int read_ret)
 		}
 		buff[BUFFER_SIZE + 1] = '\0';
 		temp = ft_strjoin(temp, buff);
+		free (buff);//pq vai ser overwritten pela função read
 	}
 }
 
