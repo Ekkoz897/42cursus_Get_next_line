@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 13:27:35 by apereira          #+#    #+#             */
-/*   Updated: 2022/11/16 15:51:12 by apereira         ###   ########.fr       */
+/*   Updated: 2022/11/17 15:24:01 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	array = malloc(size * nmemb);
 	if (!array)
 		return (NULL);
-	while (i < (size * nmemb))
+	while (i < nmemb)
 		array[i++] = 0;
 	return (array);
 }
@@ -81,7 +81,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		len2;
 	char	*str;
 
-	if (s1 && s2)
+	str = NULL;
+	// if (!s1)
+	// 	str = ft_strdup(s2);
+	else if (s1 && s2)
 	{
 		len1 = ft_strlen(s1);
 		len2 = ft_strlen(s2);
@@ -93,12 +96,9 @@ char	*ft_strjoin(char const *s1, char const *s2)
 			str[i] = s1[i];
 		i = -1;
 		while (s2[++i])
-		{
-			str[len1] = s2[i];
-			len1++;
-		}
+			str[len1++] = s2[i];
 		str[len1] = '\0';
 		return (str);
 	}
-	return (NULL);
+	return (str);
 }
