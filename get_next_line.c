@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 12:41:39 by apereira          #+#    #+#             */
-/*   Updated: 2022/11/14 15:24:44 by apereira         ###   ########.fr       */
+/*   Updated: 2022/11/16 15:53:42 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,17 @@ char	*get_next_line(int fd)
 	char		*line;
 	int			len;
 
-	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, &line, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
 		return (NULL);
-	temp = NULL;
 	line = NULL;
 	read_into_temp(fd, temp);
-	if (!temp) //se o ficheiro estiver vazio
+	if (!temp)
 		return (NULL);
 	len = cpy_line_only(temp);
 	line = ft_substr(temp, 0, len);
 	if (!line)
-		return (NULL); // para o caso do malloc da substr correr mal
-	clear_temp(temp, len);
-	if (line[0] == '\0')
-	{
-		free(temp);
-		free (line);
 		return (NULL);
-	}
+	clear_temp(temp, len);
 	return (line);
 }
 
@@ -44,21 +37,25 @@ void	read_into_temp(int fd, char *temp)
 	int		read_ret;
 	char	*buff;
 
-	read_ret = 1;
-	while (!ft_strchr(temp, '\n') && read_ret != 0)
+	if (!temp)
 	{
-		buff = malloc(BUFFER_SIZE + 1); //dentro da loop para ir dando free
-		if (!buff)
-			return ;
+		temp = malloc(1 * sizeof(char));
+		temp[0] = '\0';
+	}
+	read_ret = 1;
+	while (read_ret != 0)
+	{
+		buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 		read_ret = (int)read(fd, buff, BUFFER_SIZE);
-		if (read_ret == -1 || (!temp && read_ret == 0))
+		if (read_ret == -1)
 		{
 			free (buff);
 			return ;
 		}
 		buff[read_ret] = '\0';
 		temp = ft_strjoin(temp, buff);
-		free (buff);//pq vai ser overwritten pela função read
+		if (ft_strchr(temp, '\n'))
+			break ;
 	}
 }
 
@@ -91,8 +88,8 @@ void	clear_temp(char *temp, int nl)
 	char	*tmp_tmp;
 
 	tmp_tmp = temp;
-	free (temp);
 	temp = ft_substr(tmp_tmp, nl, ft_strlen(tmp_tmp + nl));
+	free (temp);
 }
 
 char	*ft_strdup(const char *s)
@@ -101,7 +98,7 @@ char	*ft_strdup(const char *s)
 	int		i;
 
 	i = 0;
-	g = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	g = ft_calloc(sizeof(char) * (ft_strlen(s) + 1), sizeof(char));
 	if (!g)
 		return (NULL);
 	while (s[i])
