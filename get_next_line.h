@@ -23,7 +23,6 @@
 char	*get_next_line(int fd);
 char	*read_into_temp(int fd, char *temp);
 int		cpy_line_only(char *temp);
-void	clear_temp(char *temp, int nl);
 
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr(const char *str, int c);
