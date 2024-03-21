@@ -1,5 +1,5 @@
 <h1 align="center">
-	42cursus-Get_next_line
+	42cursus_get_next_line
 </h1>
 
 <p align="center">
