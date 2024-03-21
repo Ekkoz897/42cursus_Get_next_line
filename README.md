@@ -1,4 +1,6 @@
-# 42cursus-Get_next_line
+<h1 align="center">
+	42cursus-Get_next_line
+</h1>
 
 <p align="center">
 	<b><i>Reading a line on a fd is way too tedious</i></b><br>
